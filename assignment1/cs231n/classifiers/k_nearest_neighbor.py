@@ -77,7 +77,7 @@ class KNearestNeighbor(object):
                 #####################################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-                pass
+                dists[i][j] = np.sqrt(np.sum(np.square(X[i] - self.X_train[j])))
 
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -101,7 +101,8 @@ class KNearestNeighbor(object):
             #######################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            squared_dists = np.square(self.X_train - X[i])
+            dists[i, :] = np.sqrt(np.sum(squared_dists, axis = 1))
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -131,7 +132,18 @@ class KNearestNeighbor(object):
         #########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        """ 
+        # First Try : Failed due to Memory Error (tcmalloc)
+        D = X.shape[1]
+        X_sub = (X[:, None, :] - self.X_train[None, :, :]).reshape(-1, D)
+        dists = np.sqrt(np.diag(np.dot(X_sub.T, X_sub)).reshape(num_test, num_test))
+        """
+
+        # Second Try
+        X_test_squared_list = np.sum(np.square(X), axis = 1)
+        X_train_squared_list = np.sum(np.square(self.X_train), axis = 1)
+        X_squared_list = X_test_squared_list[:, None] + X_train_squared_list
+        dists = np.sqrt(X_squared_list -  np.multiply(np.dot(X, self.X_train.T), 2))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -164,7 +176,10 @@ class KNearestNeighbor(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            sorted_dists_row = dists[i].argsort()
+            sorted_label = self.y_train[sorted_dists_row]
+            closest_y = sorted_label[0:k]
+            
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             #########################################################################
@@ -176,7 +191,10 @@ class KNearestNeighbor(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            from collections import Counter
+            c = Counter(closest_y)
+            _, max_freq = c.most_common(1)[0]
+            y_pred[i] = min(label for label, freq in c.items() if freq == max_freq)
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
