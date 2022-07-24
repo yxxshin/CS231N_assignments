@@ -28,7 +28,7 @@ def svm_loss_naive(W, X, y, reg):
     num_train = X.shape[0]
     loss = 0.0
     for i in range(num_train):
-        scores = X[i].dot(W)
+        scores = X[i].dot(W)    # row vector of x_i; scores[j] = x_i * w_j
         correct_class_score = scores[y[i]]
         for j in range(num_classes):
             if j == y[i]:
@@ -36,13 +36,18 @@ def svm_loss_naive(W, X, y, reg):
             margin = scores[j] - correct_class_score + 1 # note delta = 1
             if margin > 0:
                 loss += margin
+                dW[:, j] += X[i, :]
+                dW[:, y[i]] -= X[i, :]
+
 
     # Right now the loss is a sum over all training examples, but we want it
     # to be an average instead so we divide by num_train.
     loss /= num_train
+    dW /= num_train
 
     # Add regularization to the loss.
     loss += reg * np.sum(W * W)
+    dW += 2* reg * W
 
     #############################################################################
     # TODO:                                                                     #
@@ -78,7 +83,30 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    """
+    # First Try : Used one loop (instead of two above)
+    # It IS FASTER (about 10 times speed) and correct, but still used a loop
+    N = X.shape[0]
+    S = X.dot(W)
+    for i in range(N):
+      Li_arr = S[i, :] - X[i].dot(W[:, y[i]]) + 1
+      loss += sum(val for val in Li_arr if val > 0)
+
+    loss /= N
+
+    # Deleted the case j = y_i:
+    # it gives an exact additional lost 1
+    loss += reg * np.sum(W * W) - 1   
+    """
+
+    # Second Try : Using no loop
+    N = X.shape[0]
+    S = X.dot(W)
+    ans_S = S[np.arange(N), y]
+    margin = S - ans_S[:, None] + 1
+    loss = np.sum(np.maximum(0, margin))
+    loss /= N
+    loss += reg * np.sum(W*W) - 1
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -93,7 +121,14 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    binary = np.maximum(0, margin)
+    binary[binary > 0] = 1
+    binary[np.arange(N), y] -= binary.sum(axis = 1)
+
+    dW = np.dot(X.T, binary)
+    
+    dW /= N
+    dW += 2 * reg * W
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
