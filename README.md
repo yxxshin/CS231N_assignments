@@ -7,21 +7,22 @@ Found original assignment files from [here](https://github.com/maxim5/cs231n-202
 Used Google Colab for the following assignments..
 
 ### Assignment1
-- [x] [k-Nearest Neighbor](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/knn.ipynb) 
-- [x] [Support Vector Machines](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/svm.ipynb)
-- [ ] Softmax Classifier
+- [x] [k-Nearest Neighbor classifier](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/knn.ipynb) 
+- [x] [Training a Support Vector Machine](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/svm.ipynb)
+- [ ] Implement a Softmax classifier
 - [ ] Two-Layer Neural Network
-- [ ] Image Features
+- [ ] Higher Level Representations: Image Features
 
 ### Assignment2
-- [ ] Fully Connected Networks
+- [ ] Fully-connected Neural Network
 - [ ] Batch Normalization
 - [ ] Dropout
 - [ ] Convolutional Networks
-- [ ] Tensorflow / Pytorch
+- [ ] PyTorch / TensorFlow on CIFAR-10
 
 ### Assignment3
-- [ ] RNN Captioning
-- [ ] LSTM Captioning
-- [ ] Network Visualization
-- [ ] GANS
+- [ ] Image Captioning with Vanilla RNNs
+- [ ] Image Captioning with LSTMs
+- [ ] Network Visualization: Salienc maps, Class Visualization, and Fooling Images
+- [ ] Style Transfer
+- [ ] Generative Adversarial Networks
