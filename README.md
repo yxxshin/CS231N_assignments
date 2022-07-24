@@ -9,7 +9,7 @@ Used Google Colab for the following assignments..
 ### Assignment1
 - [x] [k-Nearest Neighbor classifier](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/knn.ipynb) 
 - [x] [Training a Support Vector Machine](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/svm.ipynb)
-- [ ] Implement a Softmax classifier
+- [x] [Implement a Softmax classifier](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/softmax.ipynb)
 - [ ] Two-Layer Neural Network
 - [ ] Higher Level Representations: Image Features
 
