@@ -80,8 +80,10 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
-
+        H = np.dot(X, W1) + b1    # First fully connected layer
+        H = np.maximum(0, H)   # ReLU
+        scores = np.dot(H, W2) + b2     # Second fully connected layer
+                
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         # If the targets are not given then jump out, we're done
@@ -98,7 +100,13 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        # Refered from my cs231n.classifier.softmax.loss codes
+        exp_scores = np.exp(scores)
+        scores_row_sum = np.sum(exp_scores, axis = 1)
+        normalized_scores = exp_scores / scores_row_sum[:, None]
+        loss = np.sum(-np.log(normalized_scores[np.arange(N), y]))
+        loss /= N
+        loss += reg * (np.sum(W1*W1) + np.sum(W2*W2))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -111,7 +119,38 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        # H1 = XW1 + b1, A = ReLU(H), S = AW2 + b2
+        H1 = np.dot(X, W1) + b1
+        A = np.maximum(0, H)
+        S = np.dot(A, W2) + b2
+
+        # dS
+        normalized_scores[np.arange(N), y] -= 1
+        dS = normalized_scores
+        dS /= N
+
+        # db2
+        db2 = dS.sum(axis = 0)
+
+        # dA
+        dA = np.dot(dS, W2.T)
+
+        # dW2
+        dW2 = np.dot(A.T, dS)
+        dW2 += 2 * reg * W2
+
+        # dH
+        dH1 = dA * (H1 > 0)
+
+        # db1
+        db1 = np.sum(dH1, axis = 0)
+
+        # dW1
+        dW1 = np.dot(X.T, dH1)
+        dW1 += 2 * reg * W1
+
+        # save to the dictionary
+        grads = {'W1': dW1, 'b1': db1, 'W2': dW2, 'b2': db2}
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -156,7 +195,9 @@ class TwoLayerNet(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            mask = np.random.choice(num_train, batch_size, replace = True)
+            X_batch = X[mask]
+            y_batch = y[mask]
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -172,7 +213,10 @@ class TwoLayerNet(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
+            self.params['W1'] -= grads['W1'] * learning_rate
+            self.params['b1'] -= grads['b1'] * learning_rate
+            self.params['W2'] -= grads['W2'] * learning_rate
+            self.params['b2'] -= grads['b2'] * learning_rate
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -218,7 +262,7 @@ class TwoLayerNet(object):
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        y_pred = np.argmax(self.loss(X), axis = 1)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
