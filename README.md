@@ -11,7 +11,7 @@ Used Google Colab for the following assignments..
 - [x] [Training a Support Vector Machine](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/svm.ipynb)
 - [x] [Implement a Softmax classifier](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/softmax.ipynb)
 - [x] [Two-Layer Neural Network](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/two_layer_net.ipynb)
-- [ ] Higher Level Representations: Image Features
+- [x] [Higher Level Representations: Image Features](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/features.ipynb)
 
 ### Assignment2
 - [ ] Fully-connected Neural Network
