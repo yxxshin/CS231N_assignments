@@ -14,7 +14,7 @@ Used Google Colab for the following assignments..
 - [x] [Higher Level Representations: Image Features](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment1/features.ipynb)
 
 ### Assignment2
-- [ ] Fully-connected Neural Network
+- [x] [Fully-connected Neural Network](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment2/FullyConnectedNets.ipynb)
 - [ ] Batch Normalization
 - [ ] Dropout
 - [ ] Convolutional Networks
