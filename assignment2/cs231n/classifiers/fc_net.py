@@ -220,9 +220,9 @@ class FullyConnectedNet(object):
           self.params['W' + str(i+1)] = np.random.randn(layer_dims[i], layer_dims[i+1]) * weight_scale
           self.params['b' + str(i+1)] = np.zeros(layer_dims[i+1])
         
-        if normalization != None:
-          self.params['gamma' + str(i+1)] = np.ones(layer_dims[i+1])
-          self.params['beta' + str(i+1)] = np.zeros(layer_dims[i+1])
+          if normalization != None and i != self.num_layers - 1:
+            self.params['gamma' + str(i+1)] = np.ones(layer_dims[i+1])
+            self.params['beta' + str(i+1)] = np.zeros(layer_dims[i+1])
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################

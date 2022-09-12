@@ -205,7 +205,19 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        mu = np.mean(x, axis = 0)
+        var = np.var(x, axis = 0)
+        
+        xmu = x - mu
+        invvar = 1 / np.sqrt(var + eps)
+
+        xhat = xmu * invvar
+        out = gamma * xhat + beta
+
+        running_mean = momentum * running_mean + (1 - momentum) * mu
+        running_var = momentum * running_var + (1 - momentum) * var
+        
+        cache = (xmu, invvar, xhat, gamma, beta, eps)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
@@ -220,7 +232,8 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        pass
+        norm_x = (x - running_mean) / np.sqrt(running_var + eps)
+        out = gamma * norm_x + beta
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
@@ -262,7 +275,25 @@ def batchnorm_backward(dout, cache):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    xmu, invvar, xhat, gamma, beta, eps = cache
+    N, D = dout.shape
+
+    # Referred to the solution at BatchNormalization.ipynb
+    dbeta = np.sum(dout, axis = 0)
+    dgammaxhat = dout
+    dgamma = np.sum(dgammaxhat * xhat, axis = 0)
+    dxhat = dgammaxhat * gamma
+    dinvvar = np.sum(dxhat * xmu, axis = 0)
+    dsqrtvar = - dinvvar * (invvar ** 2)
+    dvar = dsqrtvar * 0.5 * invvar
+    dsquare = 1/N * np.ones((N, D)) * dvar
+    dxmu1 = 2 * xmu * dsquare
+    dxmu2 = invvar * dxhat
+    dxmu = dxmu1 + dxmu2
+    dmu = - np.sum(dxmu, axis = 0)
+    dx2 = 1/N * np.ones((N, D)) * dmu
+    dx1 = dxmu
+    dx = dx1 + dx2
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -297,7 +328,19 @@ def batchnorm_backward_alt(dout, cache):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    xmu, invvar, xhat, gamma, beta, eps = cache
+    N, D = dout.shape
+
+    # Referred to the solution at BatchNormalization.ipynb
+    dbeta = np.sum(dout, axis = 0)
+    dgamma = np.sum(dout * xhat, axis = 0)
+
+    dxhat = gamma * dout
+    dvar = - gamma * 0.5 * (invvar ** 3) * np.sum(dout * xmu, axis = 0)
+    dmu = - gamma * invvar * dbeta
+
+    dx = dvar * 2 * xmu / N + dmu / N + dxhat * invvar
+
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -343,7 +386,15 @@ def layernorm_forward(x, gamma, beta, ln_param):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    mu = np.mean(x, axis = 1, keepdims = True)
+    var = np.var(x, axis = 1, keepdims = True)
+        
+    xmu = x - mu
+    invvar = 1 / np.sqrt(var + eps)
+
+    xhat = xmu * invvar
+    out = gamma * xhat + beta
+    cache = (xmu, invvar, xhat, gamma, beta, eps)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -378,8 +429,24 @@ def layernorm_backward(dout, cache):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    xmu, invvar, xhat, gamma, beta, eps = cache
+    N, D = dout.shape
 
+    dbeta = np.sum(dout, axis = 0)
+    dgammaxhat = dout
+    dgamma = np.sum(dgammaxhat * xhat, axis = 0)
+    dxhat = dgammaxhat * gamma
+    dinvvar = np.sum(dxhat * xmu, axis = 1, keepdims = True)
+    dsqrtvar = - dinvvar * (invvar ** 2)
+    dvar = dsqrtvar * 0.5 * invvar
+    dsquare = 1/D * np.ones((N, D)) * dvar
+    dxmu1 = 2 * xmu * dsquare
+    dxmu2 = invvar * dxhat
+    dxmu = dxmu1 + dxmu2
+    dmu = - np.sum(dxmu, axis = 1, keepdims = True)
+    dx2 = 1/D * np.ones((N, D)) * dmu
+    dx1 = dxmu
+    dx = dx1 + dx2
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
