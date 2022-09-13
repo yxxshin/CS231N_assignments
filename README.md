@@ -16,7 +16,7 @@ Used Google Colab for the following assignments..
 ### Assignment2
 - [x] [Fully-connected Neural Network](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment2/FullyConnectedNets.ipynb)
 - [x] [Batch Normalization](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment2/BatchNormalization.ipynb)
-- [ ] Dropout
+- [x] [Dropout](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment2/Dropout.ipynb)
 - [ ] Convolutional Networks
 - [ ] PyTorch / TensorFlow on CIFAR-10
 
