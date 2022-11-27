@@ -18,7 +18,7 @@ Used Google Colab for the following assignments..
 - [x] [Batch Normalization](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment2/BatchNormalization.ipynb)
 - [x] [Dropout](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment2/Dropout.ipynb)
 - [x] [Convolutional Networks](https://github.com/yxxshin/CS231N_assignments/blob/main/assignment2/ConvolutionalNetworks.ipynb)
-- [ ] PyTorch / TensorFlow on CIFAR-10
+- [ ] PyTorch on CIFAR-10 (2022 ver.)
 
 ### Assignment3
 - [ ] Image Captioning with Vanilla RNNs
